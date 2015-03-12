@@ -1,0 +1,4 @@
+1|9|20.0|more|ON|else
+2,4|9|20.0|less|ON|else
+1-6|11|0700|less|OFF|none
+1,2,3|10|25|more|OFF|else
