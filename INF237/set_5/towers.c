@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 // string definition
 #define GUESTS " gjester"
@@ -57,22 +58,53 @@ void hotel_manager(int nr_of_floors) {
     bool keep_going = true;
     while(keep_going) {
         char command;
-        int first_input;
-        int second_input;
+        int a;
+        int b;
         
-        scanf("%c%d%d", &command, &first_input, &second_input);
-        
-        // not finished
-        switch(command) {
-            case 'I':
-                break;
-            case 'U':
-                break;
-            case 'T':
-                break;
+        scanf("%c%d%d", &command, &a, &b);
 
-            default:
-                printf("%s", FINISHED);
+        // not finished
+        if(command == 'I') {
+            floors[nr_of_floors + a - 1] += b;
+            for(i = (nr_of_floors + a - 1) / 2; i > 0; i = (i / 2))
+                floors[i] += b;
+        }
+
+        else if(command == 'U') {
+            floors[nr_of_floors + a] -= b;
+            for(i = (nr_of_floors + a) / 2; i > 0; i = (i / 2)) 
+                floors[i] -= b;
+        }
+
+        else if(command == 'T') {
+            int total = 0;
+            
+            int start = a + nr_of_floors - 1;
+            int end = b + nr_of_floors;
+            total = floors[start];
+
+            while(start / 2 != end / 2) {
+                if(start % 2 == 0)
+                    total += floors[start+1];
+                if(end % 2 == 1)
+                    total += floors[end-1];
+
+                start /= 2;
+                end /= 2;
+            }
+
+            char* guest;
+            guest = (total == 1) ? " gjest" : " gjester";
+            
+            // one floor or whole hotel
+            if(a == 1 && b == nr_of_floors) printf("%s%d%s%s\n", "Det er ", total, guest, " som bor i hotellet.");
+            else if(a == b) printf("%s%d%s%s%d%s\n", "Det er ", total, guest, " som bor i etasje ", b, ".");
+            // multiple floors
+            else printf("%s%d%s%s%d%s%d%s\n", "Det er ", total, guest, " som bor mellom etasje ", a, " og etasje ", b, ".");
+        }
+        else if(command == 'S') { // command == S
+            printf("Slutt for i dag.");
+            keep_going = false;
         }
     }
 }
